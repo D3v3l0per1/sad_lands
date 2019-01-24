@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 
+import AllPosts from './views/Posts/AllPosts'
+import ViewPost from './views/Posts/ViewPost'
+import CreatePost from './views/Posts/CreatePost'
+
 Vue.use(Router)
 
 export default new Router({
@@ -12,6 +16,22 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/posts',
+      name: 'AllPosts',
+      component: AllPosts
+    },
+    {
+      path: '/posts/new',
+      name: 'CreatePost',
+      component: CreatePost
+    },
+    {
+      path: '/posts/:id',
+      name: 'ViewPost',
+      props: true,
+      component: ViewPost
     },
     {
       path: '/about',

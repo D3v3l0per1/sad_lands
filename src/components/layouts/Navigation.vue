@@ -8,7 +8,9 @@
       <v-toolbar-side-icon @click="sidenav = true"></v-toolbar-side-icon>
       
       <!-- Title -->
-      <v-toolbar-title class="text-uppercase"><span class="font-weight-thin">sad</span>Lands</v-toolbar-title>
+      <v-toolbar-title class="text-uppercase">
+        <router-link to="/" tag="span" style="cursor: pointer;"><span class="font-weight-thin">sad</span>Lands</router-link>
+      </v-toolbar-title>
 
 
       <v-spacer></v-spacer>
@@ -67,6 +69,7 @@ export default {
       menuItems: [
         { title: 'Home', icon: 'dashboard', link: '/' },
         { title: 'Posts', icon: 'view_list', link: '/posts' },
+        { title: 'Create a Post', icon: 'note_add', link: '/posts/new' },
         { title: 'About', icon: 'question_answer', link: '/about' },
         { title: 'Contact', icon: 'person', link: '/contact' }
       ]
