@@ -7,7 +7,11 @@ import store from './store/index'
 
 import DateFilter from './filters/date'
 
+import AlertCmp from './components/Shared/Alert'
+
 Vue.filter('date', DateFilter)
+
+Vue.component('app-alert', AlertCmp)
 
 Vue.config.productionTip = false
 
@@ -21,8 +25,7 @@ new Vue({
       authDomain: 'sadlands-ea794.firebaseapp.com',
       databaseURL: 'https://sadlands-ea794.firebaseio.com',
       projectId: 'sadlands-ea794',
-      storageBucket: 'sadlands-ea794.appspot.com',
-
+      storageBucket: 'sadlands-ea794.appspot.com'
     })
   }
 }).$mount('#app')

@@ -17,8 +17,9 @@
       
       <!-- SignUp & SignIn -->
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat>SignIn</v-btn>
-        <v-btn flat>SignUp</v-btn>
+        <v-btn flat to="/signin" v-if="!userIsAuthenticated">SignIn</v-btn>
+        <v-btn flat to="signup" v-if="!userIsAuthenticated">SignUp</v-btn>
+        <v-btn flat to="/profile" v-if="userIsAuthenticated"><v-icon left>face</v-icon> Profile</v-btn>
       </v-toolbar-items>
     
     </v-toolbar>
@@ -66,13 +67,30 @@ export default {
   data () {
     return {
       sidenav: false,
-      menuItems: [
+    }
+  },
+  computed: {
+    menuItems () {
+      let menuItems = [
         { title: 'Home', icon: 'dashboard', link: '/' },
         { title: 'Posts', icon: 'view_list', link: '/posts' },
-        { title: 'Create a Post', icon: 'note_add', link: '/posts/new' },
         { title: 'About', icon: 'question_answer', link: '/about' },
         { title: 'Contact', icon: 'person', link: '/contact' }
       ]
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          { title: 'Home', icon: 'dashboard', link: '/' },
+          { title: 'Profile', icon: 'face', link: '/profile' },
+          { title: 'Posts', icon: 'view_list', link: '/posts' },
+          { title: 'Create a Post', icon: 'note_add', link: '/posts/new' },
+          { title: 'About', icon: 'question_answer', link: '/about' },
+          { title: 'Contact', icon: 'person', link: '/contact' }
+        ]
+      }
+      return menuItems
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
     }
   }
 }

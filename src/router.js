@@ -6,6 +6,9 @@ import AllPosts from './views/Posts/AllPosts'
 import ViewPost from './views/Posts/ViewPost'
 import CreatePost from './views/Posts/CreatePost'
 
+import SignUp from './views/User/SignUp'
+import SignIn from './views/User/SignIn'
+
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +35,21 @@ export default new Router({
       name: 'ViewPost',
       props: true,
       component: ViewPost
+    },
+    {
+      path: '/signup',
+      name: 'SignUp',
+      component: SignUp
+    },
+    {
+      path: '/signin',
+      name: 'SignIn',
+      component: SignIn
+    },
+    {
+      path: '/contact',
+      name: 'Contact',
+      component: () => import('./views/Contact')
     },
     {
       path: '/about',
