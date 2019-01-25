@@ -52,10 +52,10 @@ export default new Router({
       component: SignIn
     },
     {
-      path: '/profile',
+      path: '/profile/:id',
       name: 'Profile',
       component: Profile,
-      beforeEnter: authGuard
+      props: true
     },
     {
       path: '/contact',

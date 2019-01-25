@@ -45,6 +45,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn class="primary" type="submit" :disabled="loading" :loading="loading">SignIn</v-btn>
+                <v-btn class="primary--text" flat @click="AuthentificateWithGoogle">or with Google</v-btn>
               </v-card-actions>
             </v-flex>
 
@@ -85,6 +86,9 @@ export default {
   methods: {
     onSignIn () {
       this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+    },
+    AuthentificateWithGoogle () {
+      this.$store.dispatch('AuthentificateWithGoogle')
     },
     onDismissed () {
       // console.log('Dismissed Alert')

@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 text-sm-left text-xs-center>
             <h1 class="primary--text">All Posts</h1>
           </v-flex>
-          <v-flex xs12 sm4 text-sm-right text-xs-center>
+          <v-flex xs12 sm4 text-sm-right text-xs-center v-if="userIsAuthentificated">
             <v-btn class="primary" to="/posts/new">Create a Post</v-btn>
           </v-flex>
           <v-flex xs12>
@@ -31,9 +31,9 @@
               <v-divider></v-divider>
               <v-card-title>
                 <div>
-                  <h2 class="primary--text">{{ post.title }}</h2>
+                  <h2 class="primary--text" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{ post.title }}</h2>
                   <span class="font-weight-bold">Posed at:</span> {{ post.date | date }} <br>
-                  <span class="font-weight-bold">Whoami:</span> sad_c0der
+                  <span class="font-weight-bold">Whoami:</span> {{ post.creatorId }}
                 </div>
               </v-card-title>
               <v-divider></v-divider>
@@ -58,6 +58,9 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
+    },
+    userIsAuthentificated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
     }
   }
 }

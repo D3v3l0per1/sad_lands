@@ -17,9 +17,9 @@
       
       <!-- SignUp & SignIn -->
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat to="/signin" v-if="!userIsAuthenticated">SignIn</v-btn>
-        <v-btn flat to="signup" v-if="!userIsAuthenticated">SignUp</v-btn>
-        <v-btn flat to="/profile" v-if="userIsAuthenticated"><v-icon left>face</v-icon> Profile</v-btn>
+        <v-btn flat to="/signin" v-if="!userIsAuthenticated"><v-icon left>lock_open</v-icon>SignIn</v-btn>
+        <v-btn flat to="signup" v-if="!userIsAuthenticated"><v-icon left>face</v-icon>SignUp</v-btn>
+        <v-btn flat :to="'/profile/' + user.id" v-if="userIsAuthenticated"><v-icon left>face</v-icon>Profile</v-btn>
         <v-btn flat v-if="userIsAuthenticated" @click="onLogout"><v-icon left>exit_to_app</v-icon>Logout</v-btn>
       </v-toolbar-items>
     
@@ -78,21 +78,25 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.getters.user
+    },
     menuItems () {
       let menuItems = [
         { title: 'Home', icon: 'dashboard', link: '/' },
         { title: 'Posts', icon: 'view_list', link: '/posts' },
         { title: 'About', icon: 'question_answer', link: '/about' },
-        { title: 'Contact', icon: 'person', link: '/contact' }
+        { title: 'Sign In', icon: 'lock_open', link: '/signin' },
+        { title: 'Sign Up', icon: 'face', link: '/signup' }
       ]
       if (this.userIsAuthenticated) {
         menuItems = [
           { title: 'Home', icon: 'dashboard', link: '/' },
-          { title: 'Profile', icon: 'face', link: '/profile' },
           { title: 'Posts', icon: 'view_list', link: '/posts' },
           { title: 'Create a Post', icon: 'note_add', link: '/posts/new' },
           { title: 'About', icon: 'question_answer', link: '/about' },
-          { title: 'Contact', icon: 'person', link: '/contact' }
+          { title: 'Contact', icon: 'person', link: `/contact` },
+          { title: 'Profile', icon: 'face', link: `/profile/${this.user.id}` }
         ]
       }
       return menuItems
@@ -104,6 +108,7 @@ export default {
   methods: {
     onLogout () {
       this.$store.dispatch('logout')
+      this.$router.push('/')
     }
   }
 }

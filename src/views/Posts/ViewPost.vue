@@ -22,14 +22,14 @@
           <v-divider class="primary"></v-divider>
           <v-card-text>
             <div>
-              <p class="font-italic">Posted at <span class="font-weight-bold">{{ post.date | date }}</span> by <span class="font-weight-bold">sad_c0der</span></p>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sit ratione tempore vel consequuntur quidem, iste doloremque at velit aut iusto aliquid nobis quasi molestias odio quas magni voluptas! Repudiandae.</p>
+              <p class="font-italic">Posted at <span class="font-weight-bold">{{ post.date | date }}</span> by <span class="font-weight-bold">{{ post.creatorId }}</span></p>
+              <p>{{ post.description }}</p>
             </div>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="primary">Like</v-btn>
+            <LikeDislikePost :postId="post.id" v-if="userIsAuthentificated && !userIsCreator" />
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -38,13 +38,15 @@
 </template>
 
 <script>
-import EditPost from '../../components/Edit/EditPostDetailsDialog'
+import EditPost from '../../components/Posts/Edit/EditPostDetailsDialog'
+import LikeDislikePost from '../../components/Posts/LikeDislike/LikeBtn'
 
 export default {
   name: 'ViewPost',
   props: ['id'],
   components: {
-    EditPost
+    EditPost,
+    LikeDislikePost
   },
   computed: {
     post () {
