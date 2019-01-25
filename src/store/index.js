@@ -34,8 +34,22 @@ export default new Vuex.Store({
     error: null
   },
   mutations: {
+    setLoadedPosts (state, payload) {
+      state.loadedPosts = payload
+    },
     createPost (state, payload) {
       state.loadedPosts.push(payload)
+    },
+    updatePost (state, payload) {
+      const post = state.loadedPosts.find(post => {
+        return post.id === payload.id
+      })
+      if (payload.title) {
+        post.title = payload.title
+      }
+      if (payload.description) {
+        post.description = payload.description
+      }
     },
     setUser (state, payload) {
       state.user = payload
@@ -51,21 +65,103 @@ export default new Vuex.Store({
     }
   },
   actions: {
+
+    loadPosts ({commit}) {
+      commit('setLoading', true)
+      firebase.database().ref('posts').once('value')
+        .then(
+          (data) => {
+            const posts = []
+            const obj = data.val()
+            for (let key in obj) {
+              posts.push({
+                id: key,
+                title: obj[key].title,
+                imageUrl: obj[key].imageUrl,
+                description: obj[key].description,
+                date: obj[key].date,
+                creatorId: obj[key].creatorId
+              })
+            }
+            commit('setLoadedPosts', posts)
+            commit('setLoading', false)
+          }
+        )
+        .catch(
+          err => {
+            commit('setLoading', false)
+            console.log(err)
+          }
+        )
+    },
+    
     // ######### Start Create Post Process ############
 
-    createPost ({commit}, payload) {
+    createPost ({commit, getters}, payload) {
       const post = {
         title: payload.title,
-        imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date,
-        id: 'u34zvf3'
+        date: payload.date.toISOString(),
+        creatorId: getters.user.id
       }
-      // reach out to db and store 
-      commit('createPost', post)
+      let imageUrl
+      let key
+      firebase.database().ref('posts').push(post)
+        .then(
+          (data) => {
+            key = data.key
+            return key
+          }
+        )
+        .then(key => {
+          const filename = payload.image.name
+          const ext = filename.slice(filename.lastIndexOf('.'))
+          return firebase.storage().ref('posts/' + key + '.' + ext).put(payload.image)
+        })
+        .then(fileData => {
+          return firebase.storage().ref(fileData.metadata.fullPath).getDownloadURL()
+        })
+        .then((url) => {
+          return firebase.database().ref('posts').child(key).update({imageUrl: url})
+        })
+        .then(() => {
+            commit('createPost', {
+              ...post,
+              imageUrl: imageUrl,
+              id: key
+            })
+        })
+        .catch(
+          err => {
+            console.log(err)
+          }
+        )
     },
 
     // ######### End Create Post Process ############
+
+    updatePostData ({commit}, payload) {
+      commit('setLoading', true)
+      const updateObj = {}
+      if (payload.title) {
+        updateObj.title = payload.title
+      }
+      if (payload.description) {
+        updateObj.description = payload.description
+      }
+      firebase.database().ref('posts').child(payload.id).update(updateObj)
+        .then(
+          () => {
+            commit('setLoading', false)
+            commit('updatePost', payload)
+          }
+        )
+        .catch(
+          err => {
+            console.log(err)
+          }
+        )
+    },
 
     // ######### Start SignIn Process ############
 
@@ -121,9 +217,16 @@ export default new Vuex.Store({
 
     // ######### End SignUp Process ############
 
+    autoSignIn ({commit}, payload) {
+      commit('setUser', { id: payload.uid, likes: [] })
+    },
+    logout ({commit}) {
+      firebase.auth().signOut()
+      commit('setUser', null)
+    },
     clearError ({commit}) {
       commit('clearError')
-    }
+    },
   },
   getters: {
     loadedPosts (state) {

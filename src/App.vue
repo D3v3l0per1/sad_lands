@@ -2,9 +2,7 @@
   <v-app dark>
     <Navigation />
 
-    <v-container class="mt-5">
-      <router-view></router-view>
-    </v-container>
+    <router-view class="mt-5"></router-view>
 
     <Footer />
   </v-app>

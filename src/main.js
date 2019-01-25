@@ -25,7 +25,13 @@ new Vue({
       authDomain: 'sadlands-ea794.firebaseapp.com',
       databaseURL: 'https://sadlands-ea794.firebaseio.com',
       projectId: 'sadlands-ea794',
-      storageBucket: 'sadlands-ea794.appspot.com'
+      storageBucket: 'gs://sadlands-ea794.appspot.com'
     })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user)
+      }
+    })
+    this.$store.dispatch('loadPosts')
   }
 }).$mount('#app')
