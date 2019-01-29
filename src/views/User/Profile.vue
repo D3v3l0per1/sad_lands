@@ -24,8 +24,17 @@
           </v-layout>
         </v-container>
       </v-flex>
-      <v-flex xs12>
+      <!-- <v-flex xs12 class="mb-3">
         <v-divider></v-divider>
+      </v-flex> -->
+      <v-flex xs12>
+        <h1 class="headline primary--text">Liked Posts</h1>
+        <hr class="primary">
+      </v-flex>
+      <v-flex xs12 sm4>
+        <v-card v-for="post in usersPosts" :key="post.id">
+          <v-card-title>{{ post.title }}</v-card-title>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -34,6 +43,9 @@
 <script>
 export default {
   computed: {
+    usersPosts () {
+      return this.$store.getters.usersPosts
+    },
     user () {
       return this.$store.getters.user
     },

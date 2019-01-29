@@ -30,7 +30,7 @@
               </v-img>
               <v-divider></v-divider>
               <v-card-title>
-                <div>
+                <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                   <h2 class="primary--text" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{ post.title }}</h2>
                   <span class="font-weight-bold">Posed at:</span> {{ post.date | date }} <br>
                   <span class="font-weight-bold">Whoami:</span> {{ post.creatorId }}

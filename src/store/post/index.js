@@ -43,6 +43,12 @@ export default {
       if (payload.description) {
         post.description = payload.description
       }
+    },
+    deletePost (state, payload) {
+      const post = state.loadedPosts.find(post => {
+        return post.id === payload.id
+      })
+      state.loadedPosts.slice(post)
     }
   },
   actions: {
@@ -125,10 +131,24 @@ export default {
         updateObj.description = payload.description
       }
       firebase.database().ref('posts').child(payload.id).update(updateObj)
+        .then(() => {
+          commit('setLoading', false)
+          commit('updatePost', payload)
+        })
+      .catch(
+        err => {
+          console.log(err)
+        }
+      )
+    },
+    deletePost({commit}, payload) {
+      commit('setLoading', true)
+      // commit('deletePost', payload)
+      firebase.database().ref('posts').child(payload.id).remove()
         .then(
           () => {
             commit('setLoading', false)
-            commit('updatePost', payload)
+            commit('deletePost', payload)
           }
         )
         .catch(
@@ -136,7 +156,7 @@ export default {
             console.log(err)
           }
         )
-    },
+    }
   },
   getters: {
     loadedPosts (state) {
@@ -147,12 +167,20 @@ export default {
     featuredPosts (state, getters) {
       return getters.loadedPosts.slice(0, 4)
     },
+    latestPosts (state, getters) {
+      return getters.loadedPosts.slice(0, 4)
+    },
     loadedPost (state) {
       return (postId) => {
         return state.loadedPosts.find((post) => {
           return post.id === postId
         })
       }
+    },
+    usersPosts (state, getters) {
+      return state.loadedPosts.sort((post) => {
+        return getters.user.id === post.creatorId
+      })
     }
   }
 }

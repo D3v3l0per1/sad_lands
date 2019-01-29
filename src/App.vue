@@ -25,3 +25,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  /* Globals */
+  .customImageClass {
+    transition: all ease-out 0.3s;
+    cursor: zoom-in;
+  }
+
+  .customImageClass:hover {
+    opacity: 0.6;
+  }
+</style>

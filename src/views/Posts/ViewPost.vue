@@ -11,6 +11,7 @@
             <template v-if="userIsCreator">
               <v-spacer></v-spacer>
               <EditPost :post="post" />
+              <DeletePost :post="post" />
             </template>
           </v-card-title>
           <v-divider></v-divider>
@@ -23,7 +24,8 @@
           <v-card-text>
             <div>
               <p class="font-italic">Posted at <span class="font-weight-bold">{{ post.date | date }}</span> by <span class="font-weight-bold">{{ post.creatorId }}</span></p>
-              <p>{{ post.description }}</p>
+              <v-divider class="mb-3"></v-divider>
+              <p style="white-space: pre;">{{ post.description }}</p>
             </div>
           </v-card-text>
           <v-divider></v-divider>
@@ -39,13 +41,20 @@
 
 <script>
 import EditPost from '../../components/Posts/Edit/EditPostDetailsDialog'
+import DeletePost from '../../components/Posts/Edit/DeletePostDialog'
 import LikeDislikePost from '../../components/Posts/LikeDislike/LikeBtn'
 
 export default {
   name: 'ViewPost',
   props: ['id'],
+  date () {
+    return {
+      viewImage: false
+    }
+  },
   components: {
     EditPost,
+    DeletePost,
     LikeDislikePost
   },
   computed: {
@@ -63,6 +72,11 @@ export default {
         return false
       }
       return this.$store.getters.user.id === this.post.creatorId
+    }
+  },
+  methods: {
+    viewImage () {
+      this.viewImage = true
     }
   }
 }
